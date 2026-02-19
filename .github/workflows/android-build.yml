@@ -17,26 +17,13 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
-
-    - name: Create gradlew if missing
-      run: |
-        if [ ! -f "android/gradlew" ]; then
-          cd android
-          gradle wrapper
-        fi
-      shell: bash
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x android/gradlew
-      shell: bash
+        cache: gradle
 
     - name: Build Android APK
-      run: |
-        cd android
-        ./gradlew assembleDebug --stacktrace
-      shell: bash
-      env:
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx2048m'
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: assembleDebug
+        build-root-directory: android
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
