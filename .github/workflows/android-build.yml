@@ -18,8 +18,16 @@ jobs:
         java-version: 17
         distribution: 'temurin'
 
-    - name: Build APK with Gradle
+    - name: Download and setup Gradle 8.7
       run: |
+        wget https://services.gradle.org/distributions/gradle-8.7-bin.zip
+        unzip -q gradle-8.7-bin.zip
+        export PATH=$PWD/gradle-8.7/bin:$PATH
+        gradle --version
+
+    - name: Build APK with Gradle 8.7
+      run: |
+        export PATH=$PWD/gradle-8.7/bin:$PATH
         cd android
         gradle assembleDebug --no-daemon
       env:
