@@ -17,16 +17,13 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
-        cache: gradle
 
-    - name: Make gradlew executable
-      run: chmod +x ./android/gradlew
-
-    - name: Build Android APK
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: assembleDebug
-        build-root-directory: android
+    - name: Build APK with Gradle
+      run: |
+        cd android
+        gradle assembleDebug --no-daemon
+      env:
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx2048m'
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
