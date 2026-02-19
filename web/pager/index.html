@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0D1B2A">
+    <meta name="description" content="WiFi Pager - Real-time call relay system">
+    
+    <title>📟 WiFi Pager</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230D1B2A' width='192' height='192'/><text x='96' y='130' font-size='120' text-anchor='middle' fill='%234FC3F7'>📟</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230D1B2A' width='192' height='192'/><text x='96' y='130' font-size='120' text-anchor='middle' fill='%234FC3F7'>📟</text></svg>">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ============================================
+         MAIN INTERFACE
+         ============================================ -->
+    
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <h1>📟 WiFi Pager</h1>
+            <p class="tagline">Real-Time Call Relay System</p>
+        </header>
+
+        <!-- Status Section -->
+        <section class="status-section">
+            <div id="statusContainer" class="status-card disconnected">
+                <div class="status-indicator"></div>
+                <div class="status-text">
+                    <span id="statusLabel">Connecting...</span>
+                    <span id="statusSubtext">Waiting for server connection</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Display Area -->
+        <section class="display-area" id="displayArea">
+            <div class="idle-state">
+                <div class="idle-icon">📞</div>
+                <p class="idle-text">Waiting for incoming calls...</p>
+                <p class="idle-subtext">Both phones must be on the same WiFi network</p>
+            </div>
+        </section>
+
+        <!-- Call Alert (Hidden by default) -->
+        <div id="callAlert" class="call-alert hidden">
+            <div class="call-content">
+                <div class="call-icon">📞</div>
+                <div class="caller-name" id="callerName">Incoming Call</div>
+                <div class="caller-number" id="callerNumber">+1234567890</div>
+                <div class="call-time" id="callTime">Just Now</div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <section class="control-panel">
+            <button id="enableSoundBtn" class="btn btn-primary">
+                <span class="btn-icon">🔊</span>
+                <span class="btn-text">Enable Sound</span>
+            </button>
+            <button id="clearBtn" class="btn btn-secondary">
+                <span class="btn-icon">✓</span>
+                <span class="btn-text">Clear</span>
+            </button>
+        </section>
+
+        <!-- Settings Panel -->
+        <section class="settings-panel">
+            <div class="setting-group">
+                <label for="serverInput">Server URL:</label>
+                <input type="text" id="serverInput" placeholder="ws://192.168.1.100:3000" class="input-field">
+                <button id="updateServerBtn" class="btn btn-small">Update</button>
+            </div>
+            <div class="setting-group">
+                <label>Settings:</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoPlayCheckbox" checked>
+                    <span>Auto-play sound</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="flashCheckbox" checked>
+                    <span>Flash screen</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats-section">
+            <div class="stat">
+                <span class="stat-label">Calls Received:</span>
+                <span class="stat-value" id="callCount">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Connection:</span>
+                <span class="stat-value" id="connectionStatus">Offline</span>
+            </div>
+        </section>
+
+        <!-- Call History -->
+        <section class="history-section">
+            <h3>Recent Calls</h3>
+            <div id="callHistory" class="call-history"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 WiFi Pager System</p>
+            <p class="version">v1.0.0</p>
+        </footer>
+
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="beepSound" preload="auto"></audio>
+    <audio id="backupBeep" preload="auto"></audio>
+
+    <!-- Socket.io Client Library (use different CDN if needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.4/dist/socket.io.min.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+        }
+    </script>
+
+    <!-- Main Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>
